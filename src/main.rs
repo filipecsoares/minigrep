@@ -3,17 +3,22 @@ use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let (query, file_path) = parce_config(&args);
+    let config = parce_config(&args);
 
-    println!("Searching for {}", query);
-    println!("In file {}", file_path);
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
 
-    let contents = fs::read_to_string(file_path).expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(config.file_path).expect("Something went wrong reading the file");
     println!("Here is the contents: \n\n{contents}");
 }
 
-fn parce_config(args: &[String]) -> (&str, &str) {
-    let query = &args[1];
-    let file_path = &args[2];
-    (query, file_path)
+struct Config {
+    query: String,
+    file_path: String,
+}
+
+fn parce_config(args: &[String]) -> Config {
+    let query = args[1].clone();
+    let file_path = args[2].clone();
+    Config { query, file_path }
 }
